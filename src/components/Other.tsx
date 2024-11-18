@@ -26,14 +26,14 @@ const OthersPage=()=>{
 
  ]
  return(<>
-  <Paper  p="lg" radius="md" className="w-full  mt-5">
+  <Paper   radius="md" className="w-full  mt-5">
    <Text className="text-lg font-semibold mb-4">Other Details</Text>
    <Grid gutter="xl">
     {
      data.map((item)=>(
          <Grid.Col  span={3} key={item.id}    >
-          <Box className="border border-gray-200 p-4 rounded">
-            <Text className="text-gray-100 font-semibold">{item.title}</Text>
+          <Box className="border border-gray-200 py-4 px-8 shadow rounded">
+            <Text className="text-gray-500 font-semibold">{item.title}</Text>
             <Text className="">{item.value}</Text>
            </Box>
 

@@ -1,15 +1,16 @@
 "use client";
-import {Accordion, Box, Button, Divider, Paper, Table} from "@mantine/core";
+import {Accordion, Box, Button, Divider, Paper, Table, Title} from "@mantine/core";
 import { Text } from '@mantine/core'
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus,IconMinus } from "@tabler/icons-react";
 import Braker from "@/components/Braker";
-import Totals from "@/components/Totals";
-import Other from "@/components/Other";
-import Customers from "@/components/Customers";
-import TabList from "@/components/TabList";
+import {useState} from "react";
+
 
 
 const EngineerOverHittingPage = () => {
+    const [mainAccordion, setMainAccordion] = useState(null);
+    const [nestedAccordion, setNestedAccordion] = useState({});
+
     const parts = [
         { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
         { position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
@@ -42,21 +43,29 @@ const EngineerOverHittingPage = () => {
         </Table.Tr>
     ));
 
+    const handleNestedAccordion = (accordion, value) => {
+        setNestedAccordion((prevState) => ({
+            ...prevState,
+            [accordion]: prevState[accordion] === value ? null : value,
+        }));
+    };
+
     return (
        <>
-
            <Box className="w-full h-full ">
-               <span className="font-large text-lg ml-4 mb-4 ">Services</span>
+               <span className="text-lg font-semibold  mb-4 ">Services</span>
                <span className="text-gray-500 font-semibold ml-5">$240.00</span>
                <Accordion
                    chevronPosition="left"
-                   chevron={<IconPlus className=" w-15 h-15 border border-gray-300  "/>}
-                   className=" ml-4    bg-gray-50"
+                   chevron={mainAccordion === "engine-overheating" ? <IconMinus className="min-w-6 h-8 border border-gray-300 "/> :<IconPlus className="min-w-6 h-8 border border-gray-300 "/>}
+                   className="mt-2 bg-gray-50"
                    variant="contained"
+                   value={mainAccordion}
+                   onChange={setMainAccordion}
                >
-                   <Accordion.Item value="engine-overheating" className="border-b">
-                       <Accordion.Control className="flex  w-full items-center gap-6 p-4 rounded-md  bg-gray-100 ">
-                           <span className="font-medium text-lg">Engine Overheating</span>
+                   <Accordion.Item value="engine-overheating" className="border-b ">
+                       <Accordion.Control className="flex  w-full items-center gap-6 p-1 rounded-md  bg-gray-50 ">
+                           <span className="font-medium text-md">Engine Overheating</span>
                            <span className="text-gray-500 font-semibold ml-4">$240.00</span>
                            {/*<span className="text-gray-400">Complaint, Cause, Correction</span>*/}
                        </Accordion.Control>
@@ -65,16 +74,17 @@ const EngineerOverHittingPage = () => {
                            <Box className="">
                                <Accordion
                                    chevronPosition="left"
-                                   chevron={<IconPlus className=" w-15 h-8 border  border-gray-300 "/>}
-                                   className="mt-4  ml-4  w-full bg-white "
+                                   chevron={nestedAccordion["cooling-system-repair"] === "cooling-system-repair" ? <IconMinus className="min-w-6 h-8 border border-gray-300 "/> :<IconPlus className="min-w-6 h-8 border border-gray-300 "/>}                                   className="mt-4  ml-2 w-full bg-white "
                                    variant="contained"
+                                   value={nestedAccordion["cooling-system-repair"]}
+                                   onChange={(value) => handleNestedAccordion("cooling-system-repair", value)}
                                >
-                                   <Accordion.Item value="cooling-system-repair" className="border-b">
-                                       <Accordion.Control className="flex  w-full bg-gray-100 items-center gap-2 p-4   ">
-                                           <span className="font-medium text-lg">Cooling System Repair</span>
+                                   <Accordion.Item value="cooling-system-repair" className="border-b bg-white">
+                                       <Accordion.Control className="flex  w-full bg-white items-center gap-2 p-2 ">
+                                           <span className="font-medium text-md">Cooling System Repair</span>
                                        </Accordion.Control>
                                        <Accordion.Panel>
-                                           <Text size="md">Parts</Text>
+                                           <Text  size="sm" className="bg-gray-200 p-3">Parts</Text>
                                            <Table
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
@@ -91,7 +101,7 @@ const EngineerOverHittingPage = () => {
                                                <Table.Tbody>{rows}</Table.Tbody>
                                            </Table>
 
-                                           <Text size="md">Labor</Text>
+                                           <Text size="md" className="bg-gray-200 p-3">Labor</Text>
                                            <Table
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
@@ -114,16 +124,18 @@ const EngineerOverHittingPage = () => {
 
                                <Accordion
                                    chevronPosition="left"
-                                   chevron={<IconPlus className=" w-15 h-8 border  border-gray-300 "/>}
-                                   className="mt-4  ml-4  w-full bg-white "
+                                   chevron={nestedAccordion["thermostat-replacement"] === "thermostat-replacement" ? <IconMinus className="min-w-6 h-8 border border-gray-300 "/> :<IconPlus className="min-w-6 h-8 border border-gray-300 "/>}
+                                   className="mt-4  ml-2  w-full bg-white "
                                    variant="contained"
+                                   value={nestedAccordion["thermostat-replacement"]}
+                                   onChange={(value) => handleNestedAccordion("thermostat-replacement", value)}
                                >
-                                   <Accordion.Item value="cooling-system-repair" className="border-b">
-                                       <Accordion.Control className="flex  w-full bg-gray-100 items-center gap-2 p-4   ">
-                                           <span className="font-medium text-lg">Thermostat Replacement</span>
+                                   <Accordion.Item value="thermostat-replacement" className="border-b bg-white">
+                                       <Accordion.Control className="flex  w-full  items-center gap-2 p-2   ">
+                                           <span className="font-medium text-md">Thermostat Replacement</span>
                                        </Accordion.Control>
                                        <Accordion.Panel>
-                                           <Text size="md">Parts</Text>
+                                           <Text   size="sm" className="bg-gray-200 p-3">PARTS</Text>
                                            <Table
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
@@ -140,7 +152,7 @@ const EngineerOverHittingPage = () => {
                                                <Table.Tbody>{rows}</Table.Tbody>
                                            </Table>
 
-                                           <Text size="md">Labor</Text>
+                                           <Text size="md" className="bg-gray-200 p-3">Labor</Text>
                                            <Table
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
@@ -166,9 +178,7 @@ const EngineerOverHittingPage = () => {
                    </Accordion.Item>
                </Accordion>
                <Braker/>
-               <Totals/>
-               <Other/>
-               <Customers/>
+
            </Box>
        </>
     );

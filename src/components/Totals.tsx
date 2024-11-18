@@ -20,9 +20,9 @@ const TotalsTable = () => {
                 element.bold ? "font-bold" : ""
             } ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
         >
-            <Table.Td className="px-4 py-3 text-gray-700">{element.label}</Table.Td>
-            {/* Add 'text-right' here to align the amount column to the right */}
-            <Table.Td className="px-4 py-3 text-right text-gray-900">
+            <Table.Td className="">{element.label}</Table.Td>
+
+            <Table.Td className="">
                 {element.amount}
             </Table.Td>
         </Table.Tr>

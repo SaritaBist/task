@@ -1,12 +1,11 @@
 import React from "react";
 import InfoRow from "./InfoRow";
-import {Avatar} from "@mantine/core";
+import {Avatar, Text} from "@mantine/core";
 
 const CustomerCard = () => {
     const customerData = {
         name: "Devon Lane",
         status: "Active",
-        photo: "https://via.placeholder.com/100",
         details: [
             { title: "Contract", value: "EADV25020916" },
             { title: "Deductible", value: "$100" },
@@ -19,13 +18,13 @@ const CustomerCard = () => {
 
     return (
         <>
-            <h2 className="text-lg font-semibold mb-4">Customer</h2>
+            <Text className="text-lg font-semibold mt-2">Customers</Text>
             <div
-                className="flex flex-col md:mt-8 md:flex-row items-center md:items-start bg-white p-6 rounded-lg shadow-md max-w-6xl mx-auto">
+                className="flex flex-col md:mt-8 md:flex-row items-center md:items-start bg-white p-6 rounded-lg shadow-md  ">
 
                 <div className="flex-shrink-0 mb-6 md:mb-0 text-center md:mr-12">
                     <Avatar src="woman.png" alt="it's me"  />
-                    <p className="text-sm font-semibold mt-2">{customerData.name}</p>
+                    <p className="text-md font-semibold mt-2">{customerData.name}</p>
                     <span
                         className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full mt-1">
                     {customerData.status}
