@@ -21,8 +21,7 @@ const BreakerPage=()=>{
                    </Accordion.Control>
 
                    <Accordion.Panel className="">
-                      <p>Hello
-                      </p>
+                      <p>Braker System Issue</p>
                    </Accordion.Panel>
                </Accordion.Item>
            </Accordion>

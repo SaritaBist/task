@@ -3,43 +3,55 @@ import {Accordion, Box, Button, Divider, Paper, Table, Title} from "@mantine/cor
 import { Text } from '@mantine/core'
 import { IconPlus,IconMinus } from "@tabler/icons-react";
 import Braker from "@/components/Braker";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
-
+import { IconCheck } from '@tabler/icons-react';
 
 const EngineerOverHittingPage = () => {
     const [mainAccordion, setMainAccordion] = useState(null);
     const [nestedAccordion, setNestedAccordion] = useState({});
+   const [partsData,setPartsData] = useState([])
+    const [laborData,setLaborData]=useState(([]))
 
-    const parts = [
-        { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-        { position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-        { position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
+    useEffect(()=>{
+        const fetchData = async ()=>{
+            try {
+                const response = await axios.get('api/get-services');
+                setLaborData(response.data?.data[0]?.labor || [])
+                setPartsData(response.data?.data[0]?.parts || [])
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchData()
 
-    ];
+    },[])
 
-    const rows = parts.map((element) => (
-        <Table.Tr key={element.name} className="bg-white-100">
-            <Table.Td className="px-4 py-2 ">{element.position}</Table.Td>
-            <Table.Td className="px-4 py-2 ">{element.name}</Table.Td>
-            <Table.Td className="px-4 py-2 ">{element.symbol}</Table.Td>
-            <Table.Td className="px-4 py-2 ">{element.mass}</Table.Td>
+
+
+    const rows = partsData?.map((element) => (
+        <Table.Tr key={element.partNumber} className="bg-white-100">
+            <Table.Td className="px-4 py-2  font-medium">{element?.partNumber}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element?.partName}</Table.Td>
+            <Table.Td className="px-4 py-2 font-medium ">{element?.quantity}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element?.warrantyMonths}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element?.warrantyMiles}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element?.costPer}</Table.Td>
+            <Table.Td className="px-4 py-2 font-medium ">{element?.taxPer}</Table.Td>
         </Table.Tr>
     ));
 
-    const labor = [
-        { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-        { position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-        { position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
 
-    ];
 
-    const rows2 = labor.map((element) => (
-        <Table.Tr key={element.name} className="bg-white-100">
-            <Table.Td className="px-4 py-2 ">{element.position}</Table.Td>
-            <Table.Td className="px-4 py-2 ">{element.name}</Table.Td>
-            <Table.Td className="px-4 py-2 ">{element.symbol}</Table.Td>
-            <Table.Td className="px-4 py-2 ">{element.mass}</Table.Td>
+    const rows2 = laborData.map((element,index) => (
+        <Table.Tr key={index} className="bg-white-100">
+            <Table.Td className="px-4 py-2 font-medium ">{element.description}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element.menu ? <IconCheck stroke={2} /> : 'NO'}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element.hours}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element.rate}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element.taxPercentage}</Table.Td>
+            <Table.Td className="px-4 py-2  font-medium">{element.taxPer}</Table.Td>
         </Table.Tr>
     ));
 
@@ -89,13 +101,13 @@ const EngineerOverHittingPage = () => {
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
                                                    <Table.Tr>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           position</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           name</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Symbol</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Atomic
-                                                           mass</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">PART NUMBER</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">PART NAME</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">CITY</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">WTY MD</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">WTY MILES</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">COST PER</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">TAX PER</Table.Th>
                                                    </Table.Tr>
                                                </Table.Thead>
                                                <Table.Tbody>{rows}</Table.Tbody>
@@ -106,13 +118,12 @@ const EngineerOverHittingPage = () => {
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
                                                    <Table.Tr>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           position</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           name</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Symbol</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Atomic
-                                                           mass</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">LABOR DESC</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">MENU</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">HOURS</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">RATE</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">TAX(%)</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">TAX PER</Table.Th>
                                                    </Table.Tr>
                                                </Table.Thead>
                                                <Table.Tbody>{rows2}</Table.Tbody>
@@ -140,13 +151,13 @@ const EngineerOverHittingPage = () => {
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
                                                    <Table.Tr>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           position</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           name</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Symbol</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Atomic
-                                                           mass</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">PART NUMBER</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">PART NAME</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">CITY</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">WTY MD</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">WTY MILES</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">COST PER</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">TAX PER</Table.Th>
                                                    </Table.Tr>
                                                </Table.Thead>
                                                <Table.Tbody>{rows}</Table.Tbody>
@@ -157,13 +168,12 @@ const EngineerOverHittingPage = () => {
                                                className="w-full mt-4 border-collapse border rounded-lg overflow-hidden">
                                                <Table.Thead className="">
                                                    <Table.Tr>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           position</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Element
-                                                           name</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Symbol</Table.Th>
-                                                       <Table.Th className="px-4 py-2  font-semibold">Atomic
-                                                           mass</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">LABOR DESC</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">MENU</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">HOURS</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">RATE</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">TAX(%)</Table.Th>
+                                                       <Table.Th className="px-4 py-2  font-normal">TAX PER</Table.Th>
                                                    </Table.Tr>
                                                </Table.Thead>
                                                <Table.Tbody>{rows2}</Table.Tbody>

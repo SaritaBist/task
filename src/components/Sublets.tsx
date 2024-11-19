@@ -2,46 +2,39 @@
 "use client";
 
 import { Paper, Table, Text } from "@mantine/core";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 const SubletsPage = () => {
-    const data = [
-        {
-            name: "Rental Car Service (Max 5 Days)",
-            quantity: 2,
-            costPer: "$30.00",
-            requested: "$60.00",
-        },
-        {
-            name: "Tow Service - Towing up to 50 miles",
-            quantity: 1,
-            costPer: "$150.00",
-            requested: "$150.00",
-        },
-        ]
+
+    const [subletData,setSubletData]=useState([])
 
 
-      useEffect(()=>{
-        const res= axios.get('/api/get-sublets')
-          console.log("response",res)
+    useEffect(()=>{
+        const   getData = async ()=>{
+            try {
+                const response = await axios.get('api/get-sublets');
+                console.log(response.data)
+                setSubletData(response.data.data || [])
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        getData()
+
       },[])
 
 
-    const rows = data.map((element, index) => (
-        <Table.Tr
-            key={element.name}
-
-        >
-            <Table.Td className="">{element.name}</Table.Td>
-
-            <Table.Td className="">
+    const rows = subletData?.map((element, index) => (
+        <Table.Tr key={element.name}>
+            <Table.Td className="font-semibold text-md">{element.name}</Table.Td>
+            <Table.Td className="font-semibold text-md">
                 {element.quantity}
             </Table.Td>
-            <Table.Td className="">
+            <Table.Td className="font-semibold text-md">
                 {element.costPer}
             </Table.Td>
-            <Table.Td className="">
+            <Table.Td className="font-semibold text-md">
                 {element.requested}
             </Table.Td>
         </Table.Tr>
@@ -53,18 +46,18 @@ const SubletsPage = () => {
             <Paper shadow="sm" p="lg" radius="md" className="w-full  mx-auto">
 
                 <Table className="w-full border border-gray-200 rounded-lg overflow-hidden mt-2">
-                    <Table.Thead className="bg-gray-100">
+                    <Table.Thead className="">
                         <Table.Tr>
-                            <Table.Th className="px-4 py-2 text-left text-gray-600 font-semibold">
+                            <Table.Th className="px-4 py-2 text-lg text-gray-600 font-semibold">
                                 Name of subject
                             </Table.Th>
-                            <Table.Th className="px-4 py-2 text-right text-gray-600 font-semibold">
-                                Quantity
+                            <Table.Th className="px-4 py-2 text-lg text-gray-600 font-semibold">
+                                QTY
                             </Table.Th>
-                            <Table.Th className="px-4 py-2 text-right text-gray-600 font-semibold">
+                            <Table.Th className="px-4 py-2 text-lg text-gray-600 font-semibold">
                                 Cost Per
                             </Table.Th>
-                            <Table.Th className="px-4 py-2 text-right text-gray-600 font-semibold">
+                            <Table.Th className="px-4 py-2 text-lg text-gray-600 font-semibold">
                                 Requested
                             </Table.Th>
 

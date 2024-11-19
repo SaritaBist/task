@@ -1,50 +1,76 @@
 "use client";
 
 import { Paper, Table, Text } from "@mantine/core";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 const TotalsTable = () => {
-    const data = [
-        { label: "Parts total", amount: "$2,465.00" },
-        { label: "Labor total", amount: "$1,275.00" },
-        { label: "Sublet total", amount: "$440.00" },
-        { label: "Subtotal", amount: "$4,180.00", bold: true },
-        { label: "Taxes", amount: "$296.25" },
-        { label: "Deductible for customer", amount: "- $100.00" },
-        { label: "Total", amount: "$4,376.25", bold: true },
-    ];
+
+    const [data,setData]=useState([])
+    const amount=data.map((e)=>e.amount)
+  console.log(amount)
+
+    const sum = amount.reduce((total, amount) => {
+        // Remove dollar sign and commas, and convert to number
+        const numericValue = parseFloat(amount.replace(/[$,]/g, '').replace(' ', ''));
+        console.log(numericValue)
+        return total + numericValue;
+    }, 0);
+
+
+
+
+    useEffect(()=>{
+        const fetchData = async ()=>{
+            try {
+                const response = await axios.get('api/get-total');
+                console.log(response.data.data)
+                setData(response.data.data)
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchData()
+
+    },[])
+
 
     const rows = data.map((element, index) => (
         <Table.Tr
-            key={element.label}
-            className={`${
-                element.bold ? "font-bold" : ""
-            } ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-        >
-            <Table.Td className="">{element.label}</Table.Td>
-
-            <Table.Td className="">
+            key={element.label}>
+            <Table.Td className="px-4 py-2 font-medium">{element.label}</Table.Td>
+            <Table.Td className="px-4 py-2 font-medium">
                 {element.amount}
             </Table.Td>
+
         </Table.Tr>
     ));
 
     return (
       <>
           <Text className="text-lg font-semibold mb-4">Totals</Text>
-          <Paper shadow="sm" p="lg" radius="md" className="w-full  mx-auto">
-
-              <Table className="w-full border border-gray-200 rounded-lg overflow-hidden mt-2">
-                  <Table.Thead className="bg-gray-100">
-                      <Table.Tr>
-                          <Table.Th className="px-4 py-2 text-left text-gray-600 font-semibold">
+          <Paper  p="lg" radius="md" className="w-full  mx-auto border border-gray-200">
+              <Table className="w-full  rounded-lg  mt-2" horizontalSpacing="xl">
+                  <Table.Thead className="">
+                      <Table.Tr >
+                          <Table.Th className="px-4 py-2  font-normal">
                               TOTAL
                           </Table.Th>
-                          <Table.Th className="px-4 py-2 text-right text-gray-600 font-semibold">
+                          <Table.Th className="px-4 py-2  font-normal">
                               REQUESTED
                           </Table.Th>
                       </Table.Tr>
                   </Table.Thead>
-                  <Table.Tbody>{rows}</Table.Tbody>
+                  <Table.Tbody>{rows}
+                      <Table.Tr className="bg-gray-100">
+                          <Table.Td className="px-4 py-2 text-lg  font-bold">Total</Table.Td>
+                          <Table.Td className="px-4 py-2  text-lg font-bold">
+                              {`$${sum.toFixed(2)}`}
+                          </Table.Td>
+
+                      </Table.Tr>
+                  </Table.Tbody>
               </Table>
           </Paper>
       </>

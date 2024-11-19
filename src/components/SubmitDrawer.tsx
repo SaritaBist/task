@@ -4,13 +4,18 @@ import {Drawer, Button, Text, FileInput, Checkbox, Box, Group, Badge, Select} fr
 import { useState } from "react";
 import {IconFile, IconFileFilled} from "@tabler/icons-react";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
+import AllSetDrawer from "@/components/AllSetDrawer";
 
 const PaymentDrawer = ({opened,onClose}) => {
 
     const [files, setFiles] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState("Wire Transfer (Ending in 9536)");
     const [allInvoicesProvided, setAllInvoicesProvided] = useState(false);
-
+    const [openAllSetDrawer,setOpenAllSetDrawer]=useState(false);
+  const handleSubmit=()=>{
+      onClose()
+      setOpenAllSetDrawer(true)
+  }
     return (
         <div>
 
@@ -105,8 +110,8 @@ const PaymentDrawer = ({opened,onClose}) => {
                     {/* Checkbox */}
                     <Checkbox
                         label="All related invoices are provided"
-                        checked={allInvoicesProvided}
-                        onChange={(event) => setAllInvoicesProvided(event.currentTarget.checked)}
+                        checked={true}
+
                     />
 
                     {/* Footer Buttons */}
@@ -114,12 +119,13 @@ const PaymentDrawer = ({opened,onClose}) => {
                         <Button variant="default" onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button color="black" disabled={!allInvoicesProvided}>
+                        <Button color="black"  onClick={handleSubmit}>
                             Submit for payment
                         </Button>
                     </Box>
                 </Box>
             </Drawer>
+            <AllSetDrawer closed={()=>setOpenAllSetDrawer(false)} opened={openAllSetDrawer}/>
         </div>
     );
 };

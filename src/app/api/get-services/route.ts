@@ -1,20 +1,21 @@
 import {dbConnect} from "@/db_connection/dbconnection";
 import SubletModel from "@/model/Sublet";
+import ServiceModel from "@/model/Services";
 
 
 export async function GET(request: Request) {
 
     try {
-         const db=await dbConnect();
+        const db=await dbConnect();
 
-          const subletData=await SubletModel.find()
-        console.log("jsjsjs",subletData)
+        const ServiceData=await ServiceModel.find()
+        console.log("jsjsjs",ServiceData)
 
         return Response.json(
             {
                 success: true,
                 message: "Data fetched successfully",
-                data: subletData,
+                data: ServiceData,
             },
             { status: 200 }
         );
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
         console.error('Error fetching data from MongoDB:', error);
         return Response.json({
                 success:false,
-                message:"Error fetching sublet data"
+                message:"Error fetching Service data"
             },{
                 status:500
             }
